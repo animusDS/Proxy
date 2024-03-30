@@ -1,8 +1,0 @@
-23:28:33.1282352  ERROR  Client         Remote Read Error: System.ArgumentOutOfRangeException: count ('-1') must be a non-negative value. (Parameter 'count')
-Actual value was -1.
-   at System.ArgumentOutOfRangeException.ThrowNegative[T](T value, String paramName)
-   at System.IO.BinaryReader.ReadBytes(Int32 count)
-   at Proxy.Networking.Packets.PacketReader.ReadString() in C:\Users\William\Desktop\Proxy\Proxy\Proxy\Networking\Packets\PacketReader.cs:line 30
-   at Proxy.Networking.Packets.Client.Hello.Read(PacketReader r) in C:\Users\William\Desktop\Proxy\Proxy\Proxy\Networking\Packets\Client\Hello.cs:line 22
-   at Proxy.Networking.Packets.Packet.Create(Byte[] data) in C:\Users\William\Desktop\Proxy\Proxy\Proxy\Networking\Packets\Packet.cs:line 53
-   at Proxy.Networking.Client.RemoteRead(IAsyncResult ar) in C:\Users\William\Desktop\Proxy\Proxy\Proxy\Networking\Client.cs:line 144
