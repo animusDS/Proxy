@@ -18,3 +18,4 @@ C:\Users\William\Desktop\Proxy\Proxy\Proxy\obj\Debug\net8.0\refint\Proxy.dll
 C:\Users\William\Desktop\Proxy\Proxy\Proxy\obj\Debug\net8.0\Proxy.pdb
 C:\Users\William\Desktop\Proxy\Proxy\Proxy\obj\Debug\net8.0\Proxy.genruntimeconfig.cache
 C:\Users\William\Desktop\Proxy\Proxy\Proxy\obj\Debug\net8.0\ref\Proxy.dll
+C:\Users\William\Desktop\Proxy\Proxy\Proxy\obj\Debug\net8.0\Proxy.sourcelink.json
