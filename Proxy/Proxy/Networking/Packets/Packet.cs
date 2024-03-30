@@ -29,9 +29,13 @@ public class Packet {
             PacketType.Text => new Text(),
             PacketType.Update => new Update(),
             PacketType.Reconnect => new Reconnect(),
+            PacketType.KeyInfoResponse => new KeyInfoResponse(),
             PacketType.Notification => new Notification(),
             PacketType.Hello => new Hello(),
+            PacketType.KeyInfoRequest => new KeyInfoRequest(),
+            PacketType.InvResult => new InvResult(),
             PacketType.CreateSuccess => new CreateSuccess(),
+            PacketType.Escape => new Escape(),
             _ => new UndefinedPacket(),
         };
 
@@ -69,7 +73,11 @@ public enum PacketType : byte {
     Update = 42,
     Text = 44,
     Reconnect = 45,
+    KeyInfoResponse = 63,
     Notification = 67,
     Hello = 74,
+    KeyInfoRequest = 94,
+    InvResult = 95,
     CreateSuccess = 101,
+    Escape = 105,
 }

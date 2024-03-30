@@ -2,8 +2,8 @@
 using Proxy.Networking;
 using Proxy.Networking.Packets;
 using Proxy.Networking.Packets.Client;
+using Proxy.Networking.Packets.DataObjects.Data;
 using Proxy.Networking.Packets.DataObjects.Location;
-using Proxy.Networking.Packets.DataObjects.Stats;
 using Proxy.Networking.Packets.Server;
 
 namespace Proxy.Plugins;
@@ -17,17 +17,24 @@ public class Test : IPlugin {
         proxy.HookPacket(PacketType.UseItem, OnUseItem);
         proxy.HookPacket(PacketType.Update, OnUpdate);
         proxy.HookPacket(PacketType.NewTick, OnNewTick);
+        proxy.HookPacket(PacketType.InvResult, OnInvResult);
     }
 
     private static void OnTestCommand(Client client, string cmd, string[] args) {
     }
     
     private static void OnPlayerShoot(Client client, Packet packet) {
-        
+        var playerShoot = (PlayerShoot) packet;
     }
     
     private static void OnUseItem(Client client, Packet packet) {
+        var useItem = (UseItem) packet;
         
+
+    }
+    
+    private static void OnInvResult(Client client, Packet packet) {
+        var invResult = (InvResult) packet;
     }
     
     private static void OnUpdate(Client client, Packet packet) {
