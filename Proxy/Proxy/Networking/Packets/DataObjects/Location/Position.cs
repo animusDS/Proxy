@@ -4,15 +4,9 @@ public sealed class Position : IDataObject {
     public float X;
     public float Y;
 
-    public Position() {
-    }
-
-    public Position(PacketReader r) => Read(r);
-
-    public IDataObject Read(PacketReader r) {
+    public void Read(PacketReader r) {
         X = r.ReadSingle();
         Y = r.ReadSingle();
-        return this;
     }
 
     public void Write(PacketWriter w) {
@@ -30,4 +24,28 @@ public sealed class Position : IDataObject {
     public override string ToString() {
         return "{ X=" + X + ", Y=" + Y + " }";
     }
+    
+    public static bool operator ==(Position a, Position b) {
+        return a.X == b.X && a.Y == b.Y;
+    }
+    
+    public static bool operator !=(Position a, Position b) {
+        return !(a == b);
+    }
+    
+    public static Position operator +(Position a, Position b) {
+        return new Position {
+            X = a.X + b.X,
+            Y = a.Y + b.Y,
+        };
+    }
+    
+    public static Position operator -(Position a, Position b) {
+        return new Position {
+            X = a.X - b.X,
+            Y = a.Y - b.Y,
+        };
+    }
+    
+    
 }

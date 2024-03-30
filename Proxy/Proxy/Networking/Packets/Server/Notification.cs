@@ -119,6 +119,20 @@ public class Notification : Packet {
         }
     }
     
+    public override string ToString() {
+        return $"Effect: {Effect}," +
+               $" Extra: {Extra}," +
+               $" Color: {Color}," +
+               $" Message: {Message}," +
+               $" ObjectId: {ObjectId}," +
+               $" PictureType: {PictureType}," +
+               $" QueuePosition: {QueuePosition}," +
+               $" UiExtra: {UiExtra}," +
+               $" Unknown32: {Unknown32}," +
+               $" UnknownShort: {UnknownShort}," +
+               $" EmoteId: {EmoteId}";
+    }
+    
     public enum NotificationType {
         StatIncrease = 1,
         ServerMessage = 2,

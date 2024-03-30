@@ -40,4 +40,17 @@ public class Hello : Packet {
         w.Write(ClientToken);
         w.Write(ClientHash);
     }
+    
+    public override string ToString() {
+        return $"GameId: {GameId}," +
+               $" BuildVersion: {BuildVersion}," +
+               $" AccessToken: {AccessToken}," +
+               $" KeyTime: {KeyTime}," +
+               $" Key: {BitConverter.ToString(Key)}," +
+               $" UserPlatform: {UserPlatform}," +
+               $" PlayPlatform: {PlayPlatform}," +
+               $" PlatformToken: {PlatformToken}," +
+               $" ClientToken: {ClientToken}," +
+               $" ClientHash: {ClientHash}";
+    }
 }

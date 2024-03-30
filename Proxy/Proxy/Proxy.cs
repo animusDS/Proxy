@@ -21,9 +21,7 @@ public class Proxy {
     public readonly GameData GameData;
 
     public Client Client;
-
-    public State State;
-
+    
     public delegate void PacketHandler(Client client, Packet packet);
 
     private readonly Dictionary<PacketHandler, List<PacketType>> _packetHooks;
@@ -68,23 +66,6 @@ public class Proxy {
         catch (Exception e) {
             Log.Error($"Could not accept client. {e}");
         }
-    }
-
-    public State GetState(byte[] key) {
-        var guid = key.Length == 0 ? "n/a" : Encoding.UTF8.GetString(key);
-        var newState = new State(Guid.NewGuid().ToString("n"));
-        if (guid == "n/a") {
-            State = newState;
-            return newState;
-        }
-
-        newState.ConTargetAddress = State.ConTargetAddress;
-        newState.ConTargetPort = State.ConTargetPort;
-        newState.ConRealKey = State.ConRealKey;
-
-        State = newState;
-
-        return newState;
     }
 
     public void HookPacket<T>(GenericPacketHandler<T> callback) where T : Packet {

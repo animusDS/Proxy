@@ -7,22 +7,25 @@ public class Status : IDataObject {
     public Location.Position Position = new();
     public StatData[] Data;
 
-    public IDataObject Read(PacketReader r) {
+    public void Read(PacketReader r) {
         ObjectId = CompressedInt.Read(r);
         Position.Read(r);
+        
         Data = new StatData[CompressedInt.Read(r)];
-        for (var i = 0; i < Data.Length; i++)
-            Data[i] = new StatData(r);
-
-        return this;
+        for (var i = 0; i < Data.Length; i++) {
+            Data[i] = new StatData();
+            Data[i].Read(r);
+        }
     }
 
     public void Write(PacketWriter w) {
         CompressedInt.Write(w, ObjectId);
         Position.Write(w);
+        
         CompressedInt.Write(w, Data.Length);
-        foreach (var statData in Data)
+        foreach (var statData in Data) {
             statData.Write(w);
+        }
     }
 
     public object Clone() {
@@ -31,5 +34,11 @@ public class Status : IDataObject {
             ObjectId = ObjectId,
             Position = (Location.Position) Position.Clone(),
         };
+    }
+    
+    public override string ToString() {
+        return $"ObjectId: {ObjectId}," +
+               $" Position: {Position}," +
+               $" Data: {Data}";
     }
 }

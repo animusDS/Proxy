@@ -1,6 +1,4 @@
-﻿using Proxy.Networking.Packets.DataObjects.Data;
-
-namespace Proxy.Networking.Packets.DataObjects.Stats;
+﻿namespace Proxy.Networking.Packets.DataObjects.Stats;
 
 public class StatData : IDataObject {
     public StatType Id;
@@ -8,12 +6,7 @@ public class StatData : IDataObject {
     public int SecondaryValue;
     public string StringValue;
 
-    public StatData() {
-    }
-
-    public StatData(PacketReader r) => Read(r);
-
-    public IDataObject Read(PacketReader r) {
+    public void Read(PacketReader r) {
         Id = (StatType) r.ReadByte();
 
         if (IsStringData()) {
@@ -24,8 +17,6 @@ public class StatData : IDataObject {
         }
 
         SecondaryValue = CompressedInt.Read(r);
-
-        return this;
     }
 
     public void Write(PacketWriter w) {
@@ -65,34 +56,41 @@ public class StatData : IDataObject {
     }
 
     public static bool IsUtf(StatType type) {
-        switch (type) {
-            case StatType.Experience:
-            case StatType.Name:
-            case StatType.AccountId:
-            case StatType.GuildName:
-            case StatType.Skin:
-            case StatType.PetName:
-            case StatType.GraveAccountId:
-            case StatType.DungeonModifiers:
-            case StatType.Unknown123:
-            case StatType.Unknown127:
-                return true;
-            default:
-                return false;
-        }
+        return type switch {
+            StatType.Experience or
+                StatType.Name or
+                StatType.AccountId or
+                StatType.OwnerAccountId or
+                StatType.GuildName or
+                StatType.DustAmount or
+                StatType.DustLimit or
+                StatType.Skin or
+                StatType.PetName or
+                StatType.GraveAccountId or
+                StatType.DungeonModifiers or
+                StatType.Unknown127 or
+                StatType.Unknown128 or
+                StatType.Unknown147 => true,
+            _ => false,
+        };
     }
 
     public enum StatType : byte {
+        Mp = 4,
         Experience = 6,
         Name = 31,
         AccountId = 38,
+        OwnerAccountId = 54,
         GuildName = 62,
+        DustAmount = 71,
+        DustLimit = 72,
         Skin = 80,
         PetName = 82,
         Supporter = 99,
         GraveAccountId = 115,
         DungeonModifiers = 121,
-        Unknown123 = 123,
         Unknown127 = 127,
+        Unknown128 = 128,
+        Unknown147 = 147,
     }
 }

@@ -10,11 +10,15 @@ public struct ItemStructure {
 
     public string Name;
 
+    public byte MpCost;
+
     public ItemStructure(XElement root, XElement obj) {
         Root = root;
 
         Type = (ushort) obj.AttributeDefault("type", "0x0").ParseHex();
         Name = obj.AttributeDefault("id", "Unknown");
+        
+        MpCost = (byte) obj.ElementDefault("MpCost", "0").ParseInt();
     }
 
     internal static Dictionary<ushort, ItemStructure> GetItems() {

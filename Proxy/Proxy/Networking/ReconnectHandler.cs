@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Proxy.Networking.Packets;
+﻿using Proxy.Networking.Packets;
 using Proxy.Networking.Packets.Client;
 using Proxy.Networking.Packets.Server;
 using Proxy.Resources.DataStructures;
@@ -9,9 +8,12 @@ namespace Proxy.Networking;
 public class ReconnectHandler {
     private static readonly Logger Log = new("ReconHandler");
 
+    private static string _reconnectHost = Proxy.DefaultHost;
+    private static ushort _reconnectPort = Proxy.GamePort;
+
     public void Attach(Proxy proxy) {
         proxy.HookPacket<Hello>(OnHello);
-        proxy.HookPacket<Reconnect>(OnReconnect);
+        proxy.HookPacket<Reconnect>(SendReconnect);
 
         proxy.HookCommand("con", OnConnectCommand);
         proxy.HookCommand("ip", OnIpCommand);
@@ -19,57 +21,29 @@ public class ReconnectHandler {
     }
 
     private void OnHello(Client client, Hello packet) {
-        client.State = client.Proxy.GetState(packet.Key);
-        if (client.State.ConRealKey.Length != 255) // Todo: very scuffed, but needed for /con
-        {
-            packet.Key = client.State.ConRealKey;
-            client.State.ConRealKey = new byte[255];
+        if (_reconnectHost == Proxy.LocalHost && _reconnectPort == Proxy.GamePort) {
+            Log.Error("Cannot reconnect to local host.");
+            return;
         }
-
-        client.Connect(packet);
+        
+        client.Connect(packet, _reconnectHost, _reconnectPort);
         packet.Send = false;
     }
-
-    private void OnReconnect(Client client, Reconnect packet) {
-        var recon = (Reconnect) Packet.Create(PacketType.Reconnect);
-        recon.Name = packet.Name;
-        recon.Host = string.IsNullOrEmpty(packet.Host) ? client.State.ConTargetAddress : packet.Host;
-        recon.Port = packet.Port;
-        recon.GameId = packet.GameId;
-        recon.KeyTime = packet.KeyTime;
-        recon.Key = packet.Key;
-
-        if (!string.IsNullOrEmpty(packet.Host)) {
-            client.State.ConTargetAddress = packet.Host;
-        }
-
-        if (packet.Key.Length != 0) {
-            client.State.ConRealKey = packet.Key;
-        }
-
-        packet.Key = Encoding.UTF8.GetBytes(client.State.Guid);
+    
+    private static void SendReconnect(Client client, Reconnect reconnect) {
+        var packet = (Reconnect) Packet.Create(PacketType.Reconnect);
+        packet.Name = reconnect.Name;
         packet.Host = Proxy.LocalHost;
         packet.Port = Proxy.GamePort;
-
-        Log.Info($"Reconnecting to {packet.Name} ({recon.Host}:{recon.Port})...");
-    }
-
-    private static void SendReconnect(Client client, Reconnect reconnect) {
-        var host = reconnect.Host;
-        var port = reconnect.Port;
-        var key = reconnect.Key;
-        client.State.ConTargetAddress = host;
-        client.State.ConTargetPort = port;
-        client.State.ConRealKey = key;
-        reconnect.Key = Encoding.UTF8.GetBytes(client.State.Guid);
-        reconnect.Host = Proxy.LocalHost;
-        reconnect.Port = Proxy.GamePort;
-
-        client.SendToClient(reconnect);
-
-        reconnect.Key = key;
-        reconnect.Host = host;
-        reconnect.Port = port;
+        packet.GameId = reconnect.GameId;
+        packet.KeyTime = reconnect.KeyTime;
+        packet.Key = reconnect.Key;
+        client.SendToClient(packet);
+        
+        if (reconnect.Host != string.Empty) {
+            _reconnectHost = reconnect.Host;
+            _reconnectPort = reconnect.Port;
+        }
     }
 
     private static void OnGotoCommand(Client client, string command, string[] args) {
@@ -84,7 +58,7 @@ public class ReconnectHandler {
         reconnect.Port = Proxy.GamePort;
         reconnect.GameId = -2;
         reconnect.KeyTime = -1;
-        reconnect.Key = Array.Empty<byte>();
+        reconnect.Key = [];
         SendReconnect(client, reconnect);
 
         Log.Info($"Connecting to {reconnect.Name} ({reconnect.Host}:{reconnect.Port}");
@@ -92,12 +66,13 @@ public class ReconnectHandler {
     }
 
     private static void OnIpCommand(Client client, string command, string[] args) {
-        client.CreateTextNotification("Reconnect Handler", $"IP: {client.State.ConTargetAddress}");
+        client.CreateTextNotification("Reconnect Handler", $"IP:");
     }
 
     private static void OnConnectCommand(Client client, string command, string[] args) {
-        if (args.Length != 1)
+        if (args.Length != 1) {
             return;
+        }
 
         var input = args[0];
         var server = ServerStructure.GetServer(client.Proxy.GameData.Servers, input);
@@ -112,7 +87,7 @@ public class ReconnectHandler {
         reconnect.Port = 2050;
         reconnect.GameId = -2;
         reconnect.KeyTime = -1;
-        reconnect.Key = Array.Empty<byte>();
+        reconnect.Key = [];
         SendReconnect(client, reconnect);
 
         Log.Info($"Connecting to {server.Name} ({reconnect.Host}:{reconnect.Port}");
@@ -126,7 +101,7 @@ public class ReconnectHandler {
         reconnect.Port = Proxy.GamePort;
         reconnect.GameId = -2;
         reconnect.KeyTime = -1;
-        reconnect.Key = Array.Empty<byte>();
+        reconnect.Key = [];
         SendReconnect(client, reconnect);
 
         Log.Info($"Connecting to {reconnect.Name} ({reconnect.Host}:{reconnect.Port}");
@@ -134,8 +109,7 @@ public class ReconnectHandler {
     }
 
     public static void ExecuteIpCommand(Client client) {
-        var ip = client.State.ConTargetAddress;
-        Log.Info($"IP: {ip}");
+        
     }
 
     public static void ExecuteConnectCommand(Client client, string serverName) {
@@ -152,7 +126,7 @@ public class ReconnectHandler {
         reconnect.Port = 2050;
         reconnect.GameId = -2;
         reconnect.KeyTime = -1;
-        reconnect.Key = Array.Empty<byte>();
+        reconnect.Key = [];
         SendReconnect(client, reconnect);
 
         Log.Info($"Connecting to {server.Name} ({reconnect.Host}:{reconnect.Port}");

@@ -5,17 +5,10 @@ public class Tile : IDataObject {
     public short X;
     public short Y;
 
-    private Tile() {
-    }
-
-    public Tile(PacketReader r) => Read(r);
-
-    public IDataObject Read(PacketReader r) {
+    public void Read(PacketReader r) {
         X = r.ReadInt16();
         Y = r.ReadInt16();
         Type = r.ReadUInt16();
-
-        return this;
     }
 
     public void Write(PacketWriter w) {

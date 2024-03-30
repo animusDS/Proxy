@@ -3,8 +3,6 @@ using System.Net.Sockets;
 using Proxy.Crypto;
 using Proxy.Networking.Packets;
 using Proxy.Networking.Packets.Client;
-using Proxy.Networking.Packets.DataObjects.Data;
-using Proxy.Networking.Packets.Server;
 
 namespace Proxy.Networking;
 
@@ -33,16 +31,14 @@ public class Client {
     private readonly object _serverLock;
 
     public readonly Proxy Proxy;
-
-    public State State;
-
+    
     public PlayerData PlayerData;
-
+    
     public int LastUpdate = 0;
     public int PreviousTime = 0;
 
-    public int Time => PreviousTime + (Environment.TickCount - LastUpdate);
-
+    public bool Connected => _clientConnection.Connected && _serverConnection.Connected;
+    
     private bool _disposed;
 
     public Client(Proxy proxy, TcpClient clientConnection) {
@@ -68,9 +64,9 @@ public class Client {
         BeginRead(0, 4, true);
     }
 
-    public void Connect(Hello hello) {
+    public void Connect(Hello hello, string targetAddress, int targetPort) {
         _serverConnection = new TcpClient { NoDelay = true };
-        _serverConnection.BeginConnect(State.ConTargetAddress, State.ConTargetPort, ServerConnected, hello);
+        _serverConnection.BeginConnect(targetAddress, targetPort, ServerConnected, hello);
 
         Log.Info("Client connected");
     }
@@ -95,9 +91,6 @@ public class Client {
         catch (Exception e) {
             Log.Error($"Could not connect to remote host. {e}");
             Dispose();
-
-            State.ConTargetAddress = Proxy.DefaultHost;
-            State.ConTargetPort = 2050;
         }
     }
 

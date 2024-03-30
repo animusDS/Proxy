@@ -69,19 +69,19 @@ public class Logger {
     public static void Fatal(object obj, string loggerName = "Logger")
         => Log(obj.ToString(), LogLevel.Fatal, false, loggerName);
 
-    public void Info(object obj, bool saveToFile = true)
+    public void Info(object obj, bool saveToFile = false)
         => Log(obj.ToString(), LogLevel.Info, saveToFile, _loggerName);
 
     public void Debug(object obj, bool saveToFile = false)
         => Log(obj.ToString(), LogLevel.Debug, saveToFile, _loggerName);
 
-    public void Warn(object obj, bool saveToFile = true)
+    public void Warn(object obj, bool saveToFile = false)
         => Log(obj.ToString(), LogLevel.Warn, saveToFile, _loggerName);
 
-    public void Error(object obj, bool saveToFile = true)
+    public void Error(object obj, bool saveToFile = false)
         => Log(obj.ToString(), LogLevel.Error, saveToFile, _loggerName);
 
-    public void Fatal(object obj, bool saveToFile = true)
+    public void Fatal(object obj, bool saveToFile = false)
         => Log(obj.ToString(), LogLevel.Fatal, saveToFile, _loggerName);
 
     private static ConsoleColor GetBackColor(LogLevel level) {

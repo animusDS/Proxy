@@ -23,6 +23,9 @@ public class Packet {
     public static Packet Create(PacketType type) {
         Packet packet = type switch {
             PacketType.PlayerText => new PlayerText(),
+            PacketType.NewTick => new NewTick(),
+            PacketType.UseItem => new UseItem(),
+            PacketType.PlayerShoot => new PlayerShoot(),
             PacketType.Text => new Text(),
             PacketType.Update => new Update(),
             PacketType.Reconnect => new Reconnect(),
@@ -60,6 +63,9 @@ public enum PacketType : byte {
     Undefined = 255,
 
     PlayerText = 9,
+    NewTick = 10,
+    UseItem = 13,
+    PlayerShoot = 30,
     Update = 42,
     Text = 44,
     Reconnect = 45,

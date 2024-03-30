@@ -55,7 +55,7 @@ public static class Program {
     }
 
     private static void ConCommand(IReadOnlyList<string> args) {
-        if (_proxy.State == null) {
+        if (!_proxy.Client.Connected) {
             Log.Info("Client not connected");
             return;
         }
@@ -70,7 +70,7 @@ public static class Program {
     }
 
     private static void GotoCommand(IReadOnlyList<string> args) {
-        if (_proxy.State == null) {
+        if (!_proxy.Client.Connected) {
             Log.Info("Client not connected");
             return;
         }
@@ -85,7 +85,7 @@ public static class Program {
     }
 
     private static void IpCommand() {
-        if (_proxy.State == null) {
+        if (!_proxy.Client.Connected) {
             Log.Info("Client not connected");
             return;
         }

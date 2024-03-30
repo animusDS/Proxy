@@ -36,4 +36,16 @@ public class Text : Packet {
         w.Write(IsSupporter);
         w.Write(StarBackground);
     }
+    
+    public override string ToString() {
+        return $"Name: {Name}," +
+               $" ObjectId: {ObjectId}," +
+               $" NumStars: {NumStars}," +
+               $" BubbleTime: {BubbleTime}," +
+               $" Recipient: {Recipient}," +
+               $" DirtyText: {DirtyText}," +
+               $" CleanText: {CleanText}," +
+               $" IsSupporter: {IsSupporter}," +
+               $" StarBackground: {StarBackground}";
+    }
 }

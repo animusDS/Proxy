@@ -35,7 +35,6 @@ public class Settings {
 
     public void Save() {
         var filePath = Path.Combine(Environment.CurrentDirectory, "settings.json");
-
         try {
             var json = JsonSerializer.Serialize(_pluginSettings, new JsonSerializerOptions {
                 WriteIndented = true,
@@ -61,8 +60,9 @@ public class Settings {
     public void SetPluginSettings(string pluginIdentifier, PluginSettings settings, bool save = false) {
         _pluginSettings[pluginIdentifier] = settings;
 
-        if (save)
+        if (save) {
             Save();
+        }
     }
 }
 

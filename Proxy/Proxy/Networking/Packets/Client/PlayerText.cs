@@ -12,4 +12,8 @@ public class PlayerText : Packet {
     protected internal override void Write(PacketWriter w) {
         w.Write(Text);
     }
+    
+    public override string ToString() {
+        return $"Text: {Text}";
+    }
 }

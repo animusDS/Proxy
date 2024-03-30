@@ -28,4 +28,13 @@ public class Reconnect : Packet {
         w.Write((short) Key.Length);
         w.Write(Key);
     }
+    
+    public override string ToString() {
+        return $"Name: {Name}," +
+               $" Host: {Host}," +
+               $" Port: {Port}," +
+               $" GameId: {GameId}," +
+               $" KeyTime: {KeyTime}," +
+               $" Key: {Key}";
+    }
 }

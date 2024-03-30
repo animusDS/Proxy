@@ -6,15 +6,9 @@ public class ObjectData : IDataObject {
     public ushort ObjectType;
     public Status Status = new();
 
-    private ObjectData() {
-    }
-
-    public ObjectData(PacketReader r) => Read(r);
-
-    public IDataObject Read(PacketReader r) {
+    public void Read(PacketReader r) {
         ObjectType = r.ReadUInt16();
         Status.Read(r);
-        return this;
     }
 
     public void Write(PacketWriter w) {
@@ -27,5 +21,10 @@ public class ObjectData : IDataObject {
             ObjectType = ObjectType,
             Status = (Status) Status.Clone(),
         };
+    }
+    
+    public override string ToString() {
+        return $"ObjectType: {ObjectType}," +
+               $" Status: {Status}";
     }
 }

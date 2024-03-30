@@ -18,4 +18,10 @@ public class CreateSuccess : Packet {
         w.Write(CharId);
         w.Write(UnknownString);
     }
+    
+    public override string ToString() {
+        return $"ObjectId: {ObjectId}," +
+               $" CharId: {CharId}," +
+               $" UnknownString: {UnknownString}";
+    }
 }
