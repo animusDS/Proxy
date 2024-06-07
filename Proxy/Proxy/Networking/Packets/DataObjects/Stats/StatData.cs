@@ -41,7 +41,7 @@ public class StatData : IDataObject {
         };
     }
 
-    private bool IsStringData() {
+    public bool IsStringData() {
         return IsUtf(Id);
     }
 
@@ -76,10 +76,16 @@ public class StatData : IDataObject {
     }
 
     public enum StatType : byte {
+        Size = 2,
         Mp = 4,
         Experience = 6,
         Name = 31,
+        MerchandiseType = 34,
         AccountId = 38,
+        ObjectConnection = 41,
+        MerchandiseRemainingCount = 42,
+        MerchandiseRemainingMinutes = 43,
+        MerchandiseRankRequired = 45,
         OwnerAccountId = 54,
         GuildName = 62,
         DustAmount = 71,

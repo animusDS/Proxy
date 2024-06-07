@@ -21,12 +21,4 @@ public static class ClientUtils {
         textPacket.DirtyText = text;
         client.SendToClient(textPacket);
     }
-
-    public static void CreateDungeonNotification(this Client client, string message, ushort picture = 0x0704) {
-        var notificationPacket = (Notification) Packet.Create(PacketType.Notification);
-        notificationPacket.Message = message;
-        notificationPacket.PictureType = picture;
-        notificationPacket.Effect = (byte) Notification.NotificationType.DungeonOpened;
-        client.SendToClient(notificationPacket);
-    }
 }

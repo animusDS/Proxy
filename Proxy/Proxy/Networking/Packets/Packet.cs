@@ -21,23 +21,38 @@ public class Packet {
     }
 
     public static Packet Create(PacketType type) {
-        Packet packet = type switch {
-            PacketType.PlayerText => new PlayerText(),
-            PacketType.NewTick => new NewTick(),
-            PacketType.UseItem => new UseItem(),
-            PacketType.PlayerShoot => new PlayerShoot(),
-            PacketType.Text => new Text(),
-            PacketType.Update => new Update(),
-            PacketType.Reconnect => new Reconnect(),
-            PacketType.KeyInfoResponse => new KeyInfoResponse(),
-            PacketType.Notification => new Notification(),
-            PacketType.Hello => new Hello(),
-            PacketType.KeyInfoRequest => new KeyInfoRequest(),
-            PacketType.InvResult => new InvResult(),
-            PacketType.CreateSuccess => new CreateSuccess(),
-            PacketType.Escape => new Escape(),
-            _ => new UndefinedPacket(),
-        };
+        Packet packet;
+        switch (type) {
+            case PacketType.Failure:
+                packet = new Failure();
+                Logger.Info(packet);
+                break;
+            case PacketType.Reconnect:
+                packet = new Reconnect();
+                break;
+            case PacketType.Hello:
+                packet = new Hello();
+                break;
+            case PacketType.PlayerText:
+                packet = new PlayerText();
+                break;
+            case PacketType.Text:
+                packet = new Text();
+                break;
+            case PacketType.MapInfo:
+                packet = new MapInfo();
+                break;
+            case PacketType.Update:
+                packet = new Update();
+                break;
+            case PacketType.CreateSuccess:
+                packet = new CreateSuccess();
+                break;
+            default:
+                //Logger.Warn($"Unknown packet type: {(int) type} ({type})");
+                packet = new UndefinedPacket();
+                break;
+        }
 
         packet.Type = type;
         packet.Id = (byte) type;
@@ -51,21 +66,22 @@ public class Packet {
 
         var id = r.ReadByte();
         var type = (PacketType) id;
-        if (!Enum.IsDefined(typeof(PacketType), type)) {
-            type = PacketType.Undefined;
-        }
-
         var packet = Create(type);
         packet.Id = id;
         packet.Read(r);
+
+        if (r.BaseStream.Position != r.BaseStream.Length) {
+            packet.UnreadData = r.ReadBytes((int) (r.BaseStream.Length - r.BaseStream.Position));
+
+            Logger.Warn($"Unread data in packet {packet.Type} ({packet.Id}): {BitConverter.ToString(packet.UnreadData)}");
+        }
 
         return packet;
     }
 }
 
 public enum PacketType : byte {
-    Undefined = 255,
-
+    Failure = 0,
     PlayerText = 9,
     NewTick = 10,
     UseItem = 13,
@@ -73,11 +89,19 @@ public enum PacketType : byte {
     Update = 42,
     Text = 44,
     Reconnect = 45,
+    Create = 59,
+    Load = 61,
+    Move = 62,
     KeyInfoResponse = 63,
     Notification = 67,
     Hello = 74,
+    Buy = 85,
+    MapInfo = 92,
     KeyInfoRequest = 94,
-    InvResult = 95,
+    InventoryResult = 95,
     CreateSuccess = 101,
     Escape = 105,
+    ForgeRequest = 118,
+    ForgeResult = 119,
+    Undefined = 255,
 }

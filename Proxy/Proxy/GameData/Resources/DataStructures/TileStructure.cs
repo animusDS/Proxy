@@ -5,7 +5,6 @@ namespace Proxy.Resources.DataStructures;
 
 public struct TileStructure {
     public ushort Type;
-
     public string Name;
 
     public TileStructure(XElement obj) {

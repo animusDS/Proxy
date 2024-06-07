@@ -72,8 +72,9 @@ public class Client {
     }
 
     private void ServerConnected(IAsyncResult ar) {
-        if (_disposed)
+        if (_disposed) {
             return;
+        }
 
         try {
             _serverConnection.EndConnect(ar);
@@ -164,13 +165,14 @@ public class Client {
                     w.Write(packet.Id);
 
                     packet.Write(w);
-                    foreach (var b in packet.UnreadData)
+                    foreach (var b in packet.UnreadData) {
                         w.Write(b);
+                    }
                 }
 
                 var data = ms.ToArray();
                 PacketWriter.BlockCopyInt32(data, data.Length);
-
+                
                 if (client) {
                     _clientSendState.Cipher(data);
                     _clientStream.Write(data, 0, data.Length);
