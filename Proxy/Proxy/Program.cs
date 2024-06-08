@@ -32,7 +32,7 @@ public static class Program {
         var commandArgs = split[1..];
         switch (commandName.ToLower()) {
             default:
-                Log.Info("Unknown command");
+                Log.Info("Unknown command!");
                 break;
             case "con":
                 ConCommand(commandArgs);
@@ -56,12 +56,12 @@ public static class Program {
 
     private static void ConCommand(IReadOnlyList<string> args) {
         if (!_proxy.Client.Connected) {
-            Log.Info("Client not connected");
+            Log.Info("Client not connected!");
             return;
         }
 
         if (args.Count == 0) {
-            Log.Info("Invalid command");
+            Log.Info("Invalid command!");
             return;
         }
 
@@ -71,12 +71,12 @@ public static class Program {
 
     private static void GotoCommand(IReadOnlyList<string> args) {
         if (!_proxy.Client.Connected) {
-            Log.Info("Client not connected");
+            Log.Info("Client not connected!");
             return;
         }
 
         if (args.Count == 0) {
-            Log.Info("Invalid command");
+            Log.Info("Invalid command!");
             return;
         }
 
@@ -86,7 +86,7 @@ public static class Program {
 
     private static void IpCommand() {
         if (!_proxy.Client.Connected) {
-            Log.Info("Client not connected");
+            Log.Info("Client not connected!");
             return;
         }
 
@@ -104,7 +104,7 @@ public static class Program {
 
         _settings = Settings.Load();
 
-        Log.Info("Loaded settings");
+        Log.Info("Loaded Settings.");
 
         _gameData = new GameData();
 
@@ -113,7 +113,7 @@ public static class Program {
 
         PluginLoader.AttachPlugins(_proxy);
 
-        Log.Info("Proxy started");
+        Log.Info("Proxy started.");
     }
 
     private static void StopProxy() {
@@ -122,6 +122,6 @@ public static class Program {
         _proxy.Client?.Dispose();
         Thread.Sleep(1000);
 
-        Log.Info("Proxy stopped");
+        Log.Info("Proxy stopped.");
     }
 }

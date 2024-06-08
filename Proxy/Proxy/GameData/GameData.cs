@@ -15,15 +15,15 @@ public class GameData {
 
     public GameData() {
         Servers = ServerStructure.GetServers();
-        Log.Info($"Loaded {Servers.Count} servers");
+        Log.Info($"Loaded {Servers.Count} servers.");
 
         Objects = ObjectStructure.GetObjects();
-        Log.Info($"Loaded {Objects.Count} objects");
+        Log.Info($"Loaded {Objects.Count} objects.");
 
         Items = ItemStructure.GetItems();
-        Log.Info($"Loaded {Items.Count} items");
+        Log.Info($"Loaded {Items.Count} items.");
 
         Tiles = TileStructure.GetTiles();
-        Log.Info($"Loaded {Tiles.Count} tiles");
+        Log.Info($"Loaded {Tiles.Count} tiles.");
     }
 }

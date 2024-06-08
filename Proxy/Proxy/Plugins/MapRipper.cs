@@ -10,8 +10,8 @@ using Proxy.Networking.Packets.Server;
 
 namespace Proxy.Plugins;
 
-public class Test : IPlugin {
-    private static readonly Logger Log = new(typeof(Test));
+public class MapRipper : IPlugin {
+    private static readonly Logger Log = new(typeof(MapRipper));
 
     private static JsonMap _map;
 
@@ -44,15 +44,15 @@ public class Test : IPlugin {
         }
 
         if (_map == null) {
-            client.CreateTextNotification("MapRipper", "No map data available");
+            client.CreateTextNotification("MapRipper", "There's no map data available!");
             return;
         }
         
         var json = _map.ToJson(client);
-        var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{_map.Name}.json");
+        var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{_map.Name}.jm");
         File.WriteAllText(path, json);
         
-        client.CreateTextNotification("MapRipper", $"Map data saved to {path}");
+        client.CreateTextNotification("MapRipper", $"Map data saved to: {path}");
     }
 
     private class JsonMap {

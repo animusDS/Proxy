@@ -17,7 +17,7 @@ public class Glow : IPlugin {
         var settings = client.Proxy.Settings.GetPluginSettings("Glow");
         settings.Enabled = !settings.Enabled;
         client.Proxy.Settings.SetPluginSettings("Glow", settings, true);
-        client.CreateTextNotification("Glow", settings.Enabled ? "Glow enabled" : "Glow disabled");
+        client.CreateTextNotification("Glow", settings.Enabled ? "Glow enabled." : "Glow disabled.");
     }
 
     private static void OnUpdate(Client client, Packet packet) {
